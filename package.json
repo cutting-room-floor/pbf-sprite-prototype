@@ -12,6 +12,9 @@
     "type": "git",
     "url": "https://github.com/mapbox/spritenik.git"
   },
+  "bin": {
+    "spritenik": "./bin/spritenik"
+  },
   "keywords": [ "sprite", "pbf", "image" ],
   "license": "BSD",
   "homepage": "https://github.com/mapbox/spritenik"
