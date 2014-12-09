@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+
+/* jshint node: true */
+
+'use strict';
+
+var spritenik = require('..');
+var zlib = require('zlib');
+
+if (!process.argv[2]) {
+    console.warn('Usage: %s %s [dir] [dir...]', process.argv[0], process.argv[1]);
+    process.exit(1);
+}
+
+// Load all .png images from the specified directories
+
+var quiet = false;
+
+var roots = process.argv.slice(2).filter(function(root) {
+    if (root == '-q' || root == '--quiet') {
+        quiet = true;
+    } else {
+        return true;
+    }
+});
+
+spritenik.findImages(roots, function(err, paths) {
+    if (err) throw err;
+    spritenik.loadImages(paths, function(err, images) {
+        if (err) throw err;
+
+        // Write the combined image to stdout.
+        spritenik.encodeSprite(images, function(err, data) {
+            if (err) throw err;
+
+            // Output debug information
+            if (!quiet) {
+                var icons = 0, total = 0;
+                for (var name in images) {
+                    icons++;
+                    var icon = images[name];
+                    process.stderr.write('- \x1b[1m' + name + '\x1b[0m:');
+                    for (var i = 0; i < icon.length; i++) {
+                        total++;
+                        var image = icon[i];
+                        process.stderr.write(' ');
+                        if (image.sdf) process.stderr.write('∆');
+                        process.stderr.write('' + image.width);
+                        if (image.width != image.height) process.stderr.write('×' + image.height);
+                         // + '@' + image.ratio + 'x ');
+                        if (image.ratio > 1) process.stderr.write('∗' + image.ratio);
+                    }
+                    process.stderr.write('\n');
+                }
+                console.warn('%d icons, %d images total', icons, total);
+            }
+
+            zlib.gzip(data, function(err, data) {
+                if (err) throw err;
+                process.stdout.write(data);
+            });
+        });
+    });
+});

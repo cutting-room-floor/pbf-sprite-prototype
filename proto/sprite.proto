@@ -1,0 +1,24 @@
+// Protocol Version 1
+
+package mapboxgl.sprite;
+
+option optimize_for = LITE_RUNTIME;
+
+// Stores representations of an icon for a scale factor.
+message image {
+    required uint32 width = 1; // not multiplied with the ratio
+    required uint32 height = 2; // not multiplied with the ratio
+    optional float ratio = 3 [ default = 1 ]; // pixel ratio
+    optional bool sdf = 4 [ default = false ];
+    required bytes bitmap = 5;
+}
+
+// Stores information about an icon.
+message icon {
+    required string name = 1;
+    repeated image images = 2;
+}
+
+message sprite {
+    repeated icon icons = 1;
+}
