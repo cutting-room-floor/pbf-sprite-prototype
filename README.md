@@ -1,3 +1,9 @@
+# [Use Spritezero instead](https://github.com/mapbox/spritezero)
+
+This is a proof-of-concept for a Protocol-buffer packed format for sprites: it isn't the format that Mapbox GL JS or Mapbox GL Native use. Instead, use [spritezero](https://github.com/mapbox/spritezero), a library that creates a Mapbox-compatible format, or if you're using Mapbox Studio already, you don't need to install anything - our servers run spritezero already.
+
+---
+
 Assembles individual PNG sprite images to a [Protocol Buffer](https://developers.google.com/protocol-buffers/)-based format that includes metadata.
 
 ## Usage
